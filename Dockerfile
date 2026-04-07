@@ -9,14 +9,10 @@ WORKDIR /app
 RUN pip install --no-cache-dir poetry
 
 COPY pyproject.toml ./
-
-RUN poetry install --no-interaction --no-ansi
+RUN poetry install --no-interaction --no-ansi --no-root
 
 COPY . .
 
 EXPOSE 5000
 
-ENV FLASK_APP=calculadora_web.app
-ENV FLASK_RUN_HOST=0.0.0.0
-
-CMD ["flask", "run"]
+CMD ["python", "-m", "flask", "--app", "calculadora_web.app", "run", "--host=0.0.0.0"]
