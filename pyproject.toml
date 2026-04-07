@@ -3,7 +3,6 @@ name = "calculadora-web"
 version = "0.1.0"
 description = "Aplicação web simples de calculadora usando Flask"
 authors = ["Bruno Bizarri"]
-readme = "README.md"
 packages = [{ include = "calculadora_web" }]
 
 [tool.poetry.dependencies]
