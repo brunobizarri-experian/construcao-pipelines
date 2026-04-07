@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "calculadora-web"
+version = "0.1.0"
+description = "Aplicação web simples de calculadora usando Flask"
+authors = ["Seu Nome <seu@email.com>"]
+readme = "README.md"
+packages = [{ include = "calculadora_web" }]
+
+[tool.poetry.dependencies]
+python = "^3.14"
+flask = "^3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+``
