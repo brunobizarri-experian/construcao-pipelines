@@ -2,7 +2,7 @@
 name = "calculadora-web"
 version = "0.1.0"
 description = "Aplicação web simples de calculadora usando Flask"
-authors = ["Seu Nome <seu@email.com>"]
+authors = ["Bruno Bizarri"]
 readme = "README.md"
 packages = [{ include = "calculadora_web" }]
 
@@ -13,4 +13,3 @@ flask = "^3.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-``
