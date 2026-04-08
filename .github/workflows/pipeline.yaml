@@ -28,13 +28,15 @@ jobs:
 
       - name: Debug ERROR Pytest
         run: |
-          ls calculadora_web
+          ls -lrth
+          ls -lrth calculadora_web
           cat pyproject.toml | grep include
-          poetry run python -c "import calculadora_web"
-          poetry run python -c "import calculadora_web.app"
+          cat poetry.lock
 
       - name: Testes com Pytest
         run: |
+          poetry run pytest;
+          echo "teste 2" && echo "";
           PYTHONPATH=. poetry run pytest
 
   build:
