@@ -26,6 +26,13 @@ jobs:
           pip install --no-cache-dir pytest
           poetry install --no-interaction --no-ansi
 
+      - name: Debug ERROR Pytest
+        run: |
+          ls calculadora_web
+          cat pyproject.toml | grep include
+          poetry run python -c "import calculadora_web"
+          poetry run python -c "import calculadora_web.app"
+
       - name: Testes com Pytest
         run: |
           PYTHONPATH=. poetry run pytest
