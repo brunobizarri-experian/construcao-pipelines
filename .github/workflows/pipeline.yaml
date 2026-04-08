@@ -28,8 +28,7 @@ jobs:
 
       - name: Testes com Pytest
         run: |
-          PYTHONPATH=./calculadora_web/ 
-          poetry run pytest
+          PYTHONPATH=. poetry run pytest
 
   build:
     runs-on: ubuntu-latest
