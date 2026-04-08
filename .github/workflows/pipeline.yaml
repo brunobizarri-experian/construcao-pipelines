@@ -26,13 +26,13 @@ jobs:
         run: pip install poetry
           
       - name: Install Poetry
-        run: pip install pytest
+        run: pip install pytest-flask
           
       - name: Install Calculadora WEB
         run: poetry install --no-interaction --no-ansi
 
       - name: Run PyTest
-        run: poetry run pytest
+        run: poetry run pytest-flask
 
   build:
     runs-on: ubuntu-latest
