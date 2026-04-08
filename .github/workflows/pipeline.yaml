@@ -7,17 +7,13 @@ on:
     branches: [ "main", "develop" ]
 
 jobs:
-  source:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Get Code
         uses: actions/checkout@v4
 
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Build da imagem Docker
         run: |
           docker build -t calculadora-web .
