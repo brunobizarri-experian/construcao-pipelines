@@ -30,9 +30,12 @@ jobs:
           
       - name: Install Calculadora WEB
         run: poetry install --no-interaction --no-ansi
+      
+      - name: Run tests
+        run: poetry run pytest
+        env:
+          PYTHONPATH: ${{ github.workspace }}
 
-      - name: Run PyTest
-        run: pytest
 
   build:
     runs-on: ubuntu-latest
