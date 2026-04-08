@@ -7,7 +7,7 @@ on:
     branches: [ "main", "develop" ]
 
 jobs:
-  check_code:
+  unit_tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,7 @@ jobs:
       - name: Install Poetry
         run: pip install poetry
           
-      - name: Install Poetry
+      - name: Install PyTest
         run: pip install pytest-flask
           
       - name: Install Calculadora WEB
@@ -37,7 +37,22 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}
 
 
+  sonarcloud:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: f26f9487acbdaee3889497d3b6762f2746a652aa
+
+
   build:
+    needs: unit_tests
     runs-on: ubuntu-latest
 
     steps:
