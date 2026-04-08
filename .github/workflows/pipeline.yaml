@@ -24,7 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install --no-cache-dir poetry
           pip install --no-cache-dir pytest
-          poetry install --no-interaction --no-ansi --no-root
+          poetry install --no-interaction --no-ansi
 
       - name: Testes com Pytest
         run: |
