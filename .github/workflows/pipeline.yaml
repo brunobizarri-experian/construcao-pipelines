@@ -24,20 +24,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install --no-cache-dir poetry
           pip install --no-cache-dir pytest
-          poetry install --no-interaction --no-ansi
-
-      - name: Debug ERROR Pytest
-        run: |
-          ls -lrth
-          ls -lrth calculadora_web
-          cat pyproject.toml | grep include
-          cat poetry.lock
 
       - name: Testes com Pytest
         run: |
-          poetry run pytest;
-          echo "teste 2" && echo "";
-          PYTHONPATH=. poetry run pytest
+          python -m venv venv
+          poetry install --no-interaction --no-ansi
+          poetry run pytest
 
   build:
     runs-on: ubuntu-latest
