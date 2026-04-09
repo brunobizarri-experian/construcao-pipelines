@@ -52,7 +52,9 @@ jobs:
 
 
   build:
-    needs: unit_tests
+    needs: 
+      - unit_tests
+      - sonarcloud
     runs-on: ubuntu-latest
 
     steps:
