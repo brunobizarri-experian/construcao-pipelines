@@ -86,3 +86,32 @@ jobs:
         run: |
           docker push $D_USERNAME/calculadora-web:latest
           docker push $D_USERNAME/calculadora-web:${{ github.sha }}
+
+deploy:
+    name: Deploy na OCI
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configurar SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.OCI_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan ${{ secrets.OCI_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via SSH
+        run: |
+          ssh ${{ secrets.OCI_USER }}@${{ secrets.OCI_HOST }} << 'EOF'
+            docker login -u ${D_USERNAME} -p ${{ secrets.DOCKERHUB_PAT }}
+            docker pull ${D_USERNAME}/calculadora-web:latest
+
+            docker stop calculadora-web || true
+            docker rm calculadora-web || true
+
+            docker run -d \
+              --name calculadora-web \
+              -p 80:5000 \
+              --restart always \
+              ${D_USERNAME}/calculadora-web:latest
+          EOF
