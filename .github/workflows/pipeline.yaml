@@ -70,9 +70,15 @@ jobs:
         run: |
           echo "USER= $D_USERNAME"
           echo "PAT= ${{ secrets.DOCKERHUB_PAT }}"
+      
+      - name: Login no Docker Hub Shell
+        run: |
+          echo "${{ secrets.DOCKERHUB_PAT }}" | docker login \
+          -u "$D_USERNAME" \
+          --password-stdin
 
       - name: Login no Docker Hub
-        uses: docker/login-action@v3 
+        uses: docker/login-action@v4
         with:
           username: $D_USERNAME
           password: ${{ secrets.DOCKERHUB_PAT }}
