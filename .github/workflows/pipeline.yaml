@@ -11,7 +11,7 @@ env:
 
 jobs:
   unit_tests:
-    name: Python Unit Tests
+    name: Integration Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -127,3 +127,28 @@ jobs:
                 --restart always \
                 ${IMAGE_NAME}
             EOF
+
+  e2e-tests:
+      needs: deploy
+      name: End To End Tests (Pós Deploy)
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Configurar Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.14"
+
+        - name: Upgrade PIP
+          run: python -m pip install --upgrade pip
+        
+        - name: Install dependencies
+          run: |
+            pip install pytest playwright
+            playwright install chromium
+        
+        - name: Run Playwright E2E tests
+          env:
+            APP_BASE_URL: http://${{ OCI_HOST }}
+          run: |
+            pytest tests/e2e
