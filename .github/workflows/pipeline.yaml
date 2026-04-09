@@ -83,11 +83,21 @@ jobs:
       #     username: $D_USERNAME
       #     password: ${{ secrets.DOCKERHUB_PAT }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            $D_USERNAME/calculadora-web:${{ github.sha }}
-            $D_USERNAME/calculadora-web:latest
+      # - name: Build and Push Docker Image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: |
+      #       $D_USERNAME/calculadora-web:${{ github.sha }}
+      #       $D_USERNAME/calculadora-web:latest
+
+      - name: Build da imagem Docker
+        run: |
+          docker build -t $D_USERNAME/calculadora-web:latest .
+          docker build -t $D_USERNAME/calculadora-web:${{ github.sha }} .
+
+      - name: Push da imagem para o Docker Hub
+        run: |
+          docker push $D_USERNAME/calculadora-web:latest
+          docker push $D_USERNAME/calculadora-web:${{ github.sha }}
