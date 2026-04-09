@@ -96,22 +96,34 @@ jobs:
         - name: Configurar SSH
           run: |
             mkdir -p ~/.ssh
-            echo "${{ secrets.OCI_SSH_KEY }}" > ~/.ssh/id_ed25519
+            echo "${{ secrets.OCI_SSH_KEY }}" | tr -d '\r' > ~/.ssh/id_ed25519
             chmod 600 ~/.ssh/id_ed25519
-            ssh-keyscan ${{ secrets.OCI_HOST }} >> ~/.ssh/known_hosts
+            ssh-keyscan -H "${{ secrets.OCI_HOST }}" >> ~/.ssh/known_hosts
+
 
         - name: Deploy via SSH
+          env:
+            IMAGE_NAME: brunobizarriexperian/calculadora-web:latest
+            DOCKERHUB_USER: brunobizarriexperian
+            DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
           run: |
-            ssh ${{ secrets.OCI_USER }}@${{ secrets.OCI_HOST }} << 'EOF'
-              docker login -u ${D_USERNAME} -p ${{ secrets.DOCKERHUB_PAT }}
-              docker pull ${D_USERNAME}/calculadora-web:latest
+            ssh -o StrictHostKeyChecking=no \
+                ${{ secrets.OCI_USER }}@${{ secrets.OCI_HOST }} << EOF
 
+              echo "Logando no Docker Hub..."
+              echo "${DOCKERHUB_PAT}" | docker login -u "${DOCKERHUB_USER}" --password-stdin
+
+              echo "Pull da imagem..."
+              docker pull ${IMAGE_NAME}
+
+              echo "Parando container antigo..."
               docker stop calculadora-web || true
               docker rm calculadora-web || true
 
+              echo "Subindo novo container..."
               docker run -d \
                 --name calculadora-web \
                 -p 80:5000 \
                 --restart always \
-                ${D_USERNAME}/calculadora-web:latest
+                ${IMAGE_NAME}
             EOF
