@@ -153,4 +153,8 @@ jobs:
           run: |
             echo "$APP_BASE_URL"
             echo ""
+            ls .
+            echo ""
+            ls e2e/.
+            echo ""
             pytest e2e
