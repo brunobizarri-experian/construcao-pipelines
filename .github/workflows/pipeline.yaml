@@ -151,4 +151,4 @@ jobs:
           env:
             APP_BASE_URL: http://${{ secrets.OCI_HOST }}
           run: |
-            pytest tests/e2e
+            pytest e2e
