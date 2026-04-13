@@ -81,7 +81,9 @@ jobs:
   bandit:
     name: Scan SAST - Bandit (Python)
     runs-on: ubuntu-latest
-    needs: unit_tests
+    needs: 
+      - sonarcloud
+      - integration_tests
 
     steps:
       - name: Checkout
@@ -101,7 +103,9 @@ jobs:
   dependency_check:
     name: Scan SAST - Dependency Check
     runs-on: ubuntu-latest
-    needs: unit_tests
+    needs: 
+      - sonarcloud
+      - integration_tests
 
     steps:
       - uses: actions/checkout@v4
