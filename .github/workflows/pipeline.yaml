@@ -218,3 +218,16 @@ jobs:
             APP_BASE_URL: http://${{ secrets.OCI_HOST }}
           run: |
             pytest e2e
+
+  dast-zap:
+    name: Scan DAST - OWASP ZAP
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.11.0
+        with:
+          target: http://${{ secrets.OCI_HOST }}
+          rules_file_name: '.zap/rules.tsv'
+        continue-on-error: true
