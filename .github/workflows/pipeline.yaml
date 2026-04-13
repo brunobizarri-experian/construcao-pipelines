@@ -10,7 +10,7 @@ env:
   D_USERNAME: brunobizarriexperian
 
 jobs:
-  unit_tests:
+  integration_tests:
     name: Integration Tests
     runs-on: ubuntu-latest
 
@@ -54,12 +54,71 @@ jobs:
         env:
           SONAR_TOKEN: f26f9487acbdaee3889497d3b6762f2746a652aa
 
+  codeql:
+    needs:
+      - sonarcloud
+      - integration_tests
+    name: Scan SAST - CodeQL
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  bandit:
+    name: Scan SAST - Bandit (Python)
+    runs-on: ubuntu-latest
+    needs: unit_tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install Bandit
+        run: pip install bandit
+
+      - name: Run Bandit
+        run: bandit -r . -ll
+
+  dependency_check:
+    name: Scan SAST - Dependency Check
+    runs-on: ubuntu-latest
+    needs: unit_tests
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "calculadora-web"
+          path: "."
+          format: "HTML"
 
   build:
     name: Build and Publish Docker Image
     needs: 
-      - unit_tests
-      - sonarcloud
+      - codeql
+      - bandit
+      - dependency_check
     runs-on: ubuntu-latest
 
     steps:
